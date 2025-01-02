@@ -44,12 +44,12 @@ library BitMath {
         if (x >= 0x2) r += 1;
     }
 
-    /// @notice Returns the index of the least significant bit of the number,
-    ///     where the least significant bit is at index 0 and the most significant bit is at index 255
-    /// @dev The function satisfies the property:
-    ///     (x & 2**leastSignificantBit(x)) != 0 and (x & (2**(leastSignificantBit(x)) - 1)) == 0)
-    /// @param x the value for which to compute the least significant bit, must be greater than 0
-    /// @return r the index of the least significant bit
+   ///@notice 返回数字最低有效位的索引，
+    ///其中最低有效位位于索引 0 处，最高有效位位于索引 255 处
+    ///@dev 该函数满足属性：
+    ///(x & 2**leastSignificantBit(x)) != 0 且 (x & (2**(leastSignificantBit(x)) -1)) == 0)
+    ///@param x 要计算最低有效位的值，必须大于 0
+    ///@return r 最低有效位的索引
     function leastSignificantBit(uint256 x) internal pure returns (uint8 r) {
         require(x > 0);
 
