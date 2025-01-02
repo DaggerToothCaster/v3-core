@@ -1,3 +1,4 @@
+译文：""
 # Uniswap V3
 
 [![Lint](https://github.com/Uniswap/uniswap-v3-core/actions/workflows/lint.yml/badge.svg)](https://github.com/Uniswap/uniswap-v3-core/actions/workflows/lint.yml)
@@ -6,21 +7,21 @@
 [![Mythx](https://github.com/Uniswap/uniswap-v3-core/actions/workflows/mythx.yml/badge.svg)](https://github.com/Uniswap/uniswap-v3-core/actions/workflows/mythx.yml)
 [![npm version](https://img.shields.io/npm/v/@uniswap/v3-core/latest.svg)](https://www.npmjs.com/package/@uniswap/v3-core/v/latest)
 
-This repository contains the core smart contracts for the Uniswap V3 Protocol.
-For higher level contracts, see the [uniswap-v3-periphery](https://github.com/Uniswap/uniswap-v3-periphery)
-repository.
+本存储库包含Uniswap V3协议的核心智能合约。
+要查看更高级别的合约，请参阅[uniswap-v3-periphery](https://github.com/Uniswap/uniswap-v3-periphery)
+存储库。
 
-## Bug bounty
+## 漏洞赏金
 
-This repository is subject to the Uniswap V3 bug bounty program, per the terms defined [here](./bug-bounty.md).
+本存储库受Uniswap V3漏洞赏金计划约束，详细条款请参阅[此处](./bug-bounty.md)。
 
-## Local deployment
+## 本地部署
 
-In order to deploy this code to a local testnet, you should install the npm package
+为了将该代码部署到本地测试网络，您应安装npm包
 `@uniswap/v3-core`
-and import the factory bytecode located at
-`@uniswap/v3-core/artifacts/contracts/UniswapV3Factory.sol/UniswapV3Factory.json`.
-For example:
+并导入位于
+`@uniswap/v3-core/artifacts/contracts/UniswapV3Factory.sol/UniswapV3Factory.json` 的工厂字节码。
+例如：
 
 ```typescript
 import {
@@ -28,17 +29,14 @@ import {
   bytecode as FACTORY_BYTECODE,
 } from '@uniswap/v3-core/artifacts/contracts/UniswapV3Factory.sol/UniswapV3Factory.json'
 
-// deploy the bytecode
+// 部署字节码
 ```
 
-This will ensure that you are testing against the same bytecode that is deployed to
-mainnet and public testnets, and all Uniswap code will correctly interoperate with
-your local deployment.
+这将确保您测试与部署到主网和公共测试网络的相同字节码，并且所有Uniswap代码将正确与您的本地部署互操作。
 
-## Using solidity interfaces
+## 使用solidity接口
 
-The Uniswap v3 interfaces are available for import into solidity smart contracts
-via the npm artifact `@uniswap/v3-core`, e.g.:
+Uniswap v3接口可通过npm工件`@uniswap/v3-core`导入solidity智能合约，例如：
 
 ```solidity
 import '@uniswap/v3-core/contracts/interfaces/IUniswapV3Pool.sol';
@@ -53,14 +51,14 @@ contract MyContract {
 
 ```
 
-## Licensing
+## 许可
 
-The primary license for Uniswap V3 Core is the Business Source License 1.1 (`BUSL-1.1`), see [`LICENSE`](./LICENSE). However, some files are dual licensed under `GPL-2.0-or-later`:
+Uniswap V3 Core的主要许可是商业源代码许可1.1 (`BUSL-1.1`), 参见 [`LICENSE`](./LICENSE)。但是，某些文件也采用`GPL-2.0或更高版本`双许可：
 
-- All files in `contracts/interfaces/` may also be licensed under `GPL-2.0-or-later` (as indicated in their SPDX headers), see [`contracts/interfaces/LICENSE`](./contracts/interfaces/LICENSE)
-- Several files in `contracts/libraries/` may also be licensed under `GPL-2.0-or-later` (as indicated in their SPDX headers), see [`contracts/libraries/LICENSE`](contracts/libraries/LICENSE)
+- `contracts/interfaces/` 中的所有文件也可能受 `GPL-2.0-or-later` 许可 (如其SPDX头部中指示的那样)，请参见 [`contracts/interfaces/LICENSE`](./contracts/interfaces/LICENSE)
+- `contracts/libraries/` 中的几个文件也可能受 `GPL-2.0-or-later` 许可 (如其SPDX头部中指示的那样)，请参见 [`contracts/libraries/LICENSE`](contracts/libraries/LICENSE)
 
-### Other Exceptions
+### 其他例外
 
-- `contracts/libraries/FullMath.sol` is licensed under `MIT` (as indicated in its SPDX header), see [`contracts/libraries/LICENSE_MIT`](contracts/libraries/LICENSE_MIT)
-- All files in `contracts/test` remain unlicensed (as indicated in their SPDX headers).
+- `contracts/libraries/FullMath.sol` 受 `MIT` 许可，(如其SPDX头部中指示的那样)，请参见 [`contracts/libraries/LICENSE_MIT`](contracts/libraries/LICENSE_MIT)
+- `contracts/test` 中的所有文件保持未授权 (如其SPDX头部中指示的那样)。

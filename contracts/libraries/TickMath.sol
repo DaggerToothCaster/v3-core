@@ -1,25 +1,23 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity >=0.5.0 <0.8.0;
 
-/// @title Math library for computing sqrt prices from ticks and vice versa
-/// @notice Computes sqrt price for ticks of size 1.0001, i.e. sqrt(1.0001^tick) as fixed point Q64.96 numbers. Supports
-/// prices between 2**-128 and 2**128
+/// @title 用于从ticks计算平方根价格并反之的数学库
+/// @notice 计算tick大小为1.0001时的平方根价格，即sqrt(1.0001^tick)，作为固定点Q64.96数字。支持2**-128到2**128之间的价格
 library TickMath {
-    /// @dev The minimum tick that may be passed to #getSqrtRatioAtTick computed from log base 1.0001 of 2**-128
+    /// @dev 可传递给#getSqrtRatioAtTick计算的最小tick，计算自log以1.0001为底的2**-128
     int24 internal constant MIN_TICK = -887272;
-    /// @dev The maximum tick that may be passed to #getSqrtRatioAtTick computed from log base 1.0001 of 2**128
+    /// @dev 可传递给#getSqrtRatioAtTick计算的最大tick，计算自log以1.0001为底的2**128
     int24 internal constant MAX_TICK = -MIN_TICK;
 
-    /// @dev The minimum value that can be returned from #getSqrtRatioAtTick. Equivalent to getSqrtRatioAtTick(MIN_TICK)
+    /// @dev #getSqrtRatioAtTick返回的最小值。等同于getSqrtRatioAtTick(MIN_TICK)
     uint160 internal constant MIN_SQRT_RATIO = 4295128739;
-    /// @dev The maximum value that can be returned from #getSqrtRatioAtTick. Equivalent to getSqrtRatioAtTick(MAX_TICK)
+    /// @dev #getSqrtRatioAtTick返回的最大值。等同于getSqrtRatioAtTick(MAX_TICK)
     uint160 internal constant MAX_SQRT_RATIO = 1461446703485210103287273052203988822378723970342;
 
-    /// @notice Calculates sqrt(1.0001^tick) * 2^96
-    /// @dev Throws if |tick| > max tick
-    /// @param tick The input tick for the above formula
-    /// @return sqrtPriceX96 A Fixed point Q64.96 number representing the sqrt of the ratio of the two assets (token1/token0)
-    /// at the given tick
+    /// @notice 计算sqrt(1.0001^tick) * 2^96
+    /// @dev 如果|tick| > 最大tick，则抛出异常
+    /// @param tick 上述公式的输入tick
+    /// @return sqrtPriceX96 代表两个资产（token1/token0）在给定tick处比例的平方根的固定点Q64.96数字
     function getSqrtRatioAtTick(int24 tick) internal pure returns (uint160 sqrtPriceX96) {
         uint256 absTick = tick < 0 ? uint256(-int256(tick)) : uint256(int256(tick));
         require(absTick <= uint256(MAX_TICK), 'T');
@@ -200,6 +198,10 @@ library TickMath {
         int24 tickLow = int24((log_sqrt10001 - 3402992956809132418596140100660247210) >> 128);
         int24 tickHi = int24((log_sqrt10001 + 291339464771989622907027621153398088495) >> 128);
 
-        tick = tickLow == tickHi ? tickLow : getSqrtRatioAtTick(tickHi) <= sqrtPriceX96 ? tickHi : tickLow;
+        tick = tickLow == tickHi
+            ? tickLow
+            : getSqrtRatioAtTick(tickHi) <= sqrtPriceX96
+                ? tickHi
+                : tickLow;
     }
 }

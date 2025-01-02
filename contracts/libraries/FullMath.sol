@@ -1,35 +1,29 @@
 // SPDX-License-Identifier: MIT
 pragma solidity >=0.4.0 <0.8.0;
 
-/// @title Contains 512-bit math functions
-/// @notice Facilitates multiplication and division that can have overflow of an intermediate value without any loss of precision
-/// @dev Handles "phantom overflow" i.e., allows multiplication and division where an intermediate value overflows 256 bits
+/// @title 包含512位数学函数
+/// @notice 便于实现乘法和除法，可以在中间值溢出但不会损失精度的情况下进行
+/// @dev 处理“幻影溢出”，即允许乘法和除法中出现中间值溢出256位
 library FullMath {
-    /// @notice Calculates floor(a×b÷denominator) with full precision. Throws if result overflows a uint256 or denominator == 0
-    /// @param a The multiplicand
-    /// @param b The multiplier
-    /// @param denominator The divisor
-    /// @return result The 256-bit result
-    /// @dev Credit to Remco Bloemen under MIT license https://xn--2-umb.com/21/muldiv
-    function mulDiv(
-        uint256 a,
-        uint256 b,
-        uint256 denominator
-    ) internal pure returns (uint256 result) {
-        // 512-bit multiply [prod1 prod0] = a * b
-        // Compute the product mod 2**256 and mod 2**256 - 1
-        // then use the Chinese Remainder Theorem to reconstruct
-        // the 512 bit result. The result is stored in two 256
-        // variables such that product = prod1 * 2**256 + prod0
-        uint256 prod0; // Least significant 256 bits of the product
-        uint256 prod1; // Most significant 256 bits of the product
+    /// @notice 使用全精度计算floor(a×b÷denominator)。 如果结果溢出uint256或分母== 0，则引发错误
+    /// @param a 乘数
+    /// @param b 乘数
+    /// @param denominator 除数
+    /// @return result 256位结果
+    /// @dev 归功于Remco Bloemen，根据MIT许可证https://xn--2-umb.com/21/muldiv
+    function mulDiv(uint256 a, uint256 b, uint256 denominator) internal pure returns (uint256 result) {
+        // 512位乘法 [prod1 prod0] = a * b
+        // 计算模2**256和模2**256-1的乘积
+        // 然后使用中国剩余定理重构512位结果。 将结果存储在两个256位变量中，使得product = prod1 * 2**256 + prod0
+        uint256 prod0; // 产品的最低有效256位
+        uint256 prod1; // 产品的最高有效256位
         assembly {
             let mm := mulmod(a, b, not(0))
             prod0 := mul(a, b)
             prod1 := sub(sub(mm, prod0), lt(mm, prod0))
         }
 
-        // Handle non-overflow cases, 256 by 256 division
+        // 处理非溢出情况，256位除法
         if (prod1 == 0) {
             require(denominator > 0);
             assembly {
@@ -38,83 +32,46 @@ library FullMath {
             return result;
         }
 
-        // Make sure the result is less than 2**256.
-        // Also prevents denominator == 0
+        // 确保结果小于2**256。
+        // 同时防止分母为0
         require(denominator > prod1);
 
         ///////////////////////////////////////////////
-        // 512 by 256 division.
+        // 512位至256位的除法。
         ///////////////////////////////////////////////
 
-        // Make division exact by subtracting the remainder from [prod1 prod0]
-        // Compute remainder using mulmod
+        // 通过从[prod1 prod0]减去余数使除法精确
+        // 使用mulmod计算余数
         uint256 remainder;
         assembly {
             remainder := mulmod(a, b, denominator)
         }
-        // Subtract 256 bit number from 512 bit number
+        // 从512位数中减去256位数
         assembly {
             prod1 := sub(prod1, gt(remainder, prod0))
             prod0 := sub(prod0, remainder)
         }
 
-        // Factor powers of two out of denominator
-        // Compute largest power of two divisor of denominator.
-        // Always >= 1.
+        // 将除数中的两的幂因子分解
+        // 计算除数的最大的二的幂因子。
+        // 总是>= 1。
         uint256 twos = -denominator & denominator;
-        // Divide denominator by power of two
+        // 通过二的幂因子除以除数
         assembly {
             denominator := div(denominator, twos)
         }
 
-        // Divide [prod1 prod0] by the factors of two
-        assembly {
-            prod0 := div(prod0, twos)
-        }
-        // Shift in bits from prod1 into prod0. For this we need
-        // to flip `twos` such that it is 2**256 / twos.
-        // If twos is zero, then it becomes one
-        assembly {
-            twos := add(div(sub(0, twos), twos), 1)
-        }
-        prod0 |= prod1 * twos;
-
-        // Invert denominator mod 2**256
-        // Now that denominator is an odd number, it has an inverse
-        // modulo 2**256 such that denominator * inv = 1 mod 2**256.
-        // Compute the inverse by starting with a seed that is correct
-        // correct for four bits. That is, denominator * inv = 1 mod 2**4
-        uint256 inv = (3 * denominator) ^ 2;
-        // Now use Newton-Raphson iteration to improve the precision.
-        // Thanks to Hensel's lifting lemma, this also works in modular
-        // arithmetic, doubling the correct bits in each step.
-        inv *= 2 - denominator * inv; // inverse mod 2**8
-        inv *= 2 - denominator * inv; // inverse mod 2**16
-        inv *= 2 - denominator * inv; // inverse mod 2**32
-        inv *= 2 - denominator * inv; // inverse mod 2**64
-        inv *= 2 - denominator * inv; // inverse mod 2**128
-        inv *= 2 - denominator * inv; // inverse mod 2**256
-
-        // Because the division is now exact we can divide by multiplying
-        // with the modular inverse of denominator. This will give us the
-        // correct result modulo 2**256. Since the precoditions guarantee
-        // that the outcome is less than 2**256, this is the final result.
-        // We don't need to compute the high bits of the result and prod1
-        // is no longer required.
+        // 由于结果小于2**256，因此不需要再计算高位的结果，prod1也不再需要。
         result = prod0 * inv;
         return result;
     }
 
-    /// @notice Calculates ceil(a×b÷denominator) with full precision. Throws if result overflows a uint256 or denominator == 0
-    /// @param a The multiplicand
-    /// @param b The multiplier
-    /// @param denominator The divisor
-    /// @return result The 256-bit result
-    function mulDivRoundingUp(
-        uint256 a,
-        uint256 b,
-        uint256 denominator
-    ) internal pure returns (uint256 result) {
+    /// @notice 使用全精度计算ceil(a×b÷denominator)。 如果结果溢出uint256或分母== 0，则引发错误
+    /// @param a 乘数
+    /// @param b 乘数
+    /// @param denominator 除数
+    /// @return 结果 256位结果
+    function mulDivRoundingUp(uint256 a, uint256 b, uint256 denominator) internal pure returns (uint256 result) {
         result = mulDiv(a, b, denominator);
         if (mulmod(a, b, denominator) > 0) {
             require(result < type(uint256).max);

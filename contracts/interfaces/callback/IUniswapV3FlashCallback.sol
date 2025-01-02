@@ -1,15 +1,15 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 pragma solidity >=0.5.0;
 
-/// @title Callback for IUniswapV3PoolActions#flash
-/// @notice Any contract that calls IUniswapV3PoolActions#flash must implement this interface
+/// @title IUniswapV3PoolActions#flash的回调
+/// @notice 任何调用IUniswapV3PoolActions#flash的合约必须实现此接口
 interface IUniswapV3FlashCallback {
-    /// @notice Called to `msg.sender` after transferring to the recipient from IUniswapV3Pool#flash.
-    /// @dev In the implementation you must repay the pool the tokens sent by flash plus the computed fee amounts.
-    /// The caller of this method must be checked to be a UniswapV3Pool deployed by the canonical UniswapV3Factory.
-    /// @param fee0 The fee amount in token0 due to the pool by the end of the flash
-    /// @param fee1 The fee amount in token1 due to the pool by the end of the flash
-    /// @param data Any data passed through by the caller via the IUniswapV3PoolActions#flash call
+    /// @notice 在从IUniswapV3Pool#flash转账给接收者后调用`msg.sender`
+    /// @dev 在实现中，您必须偿还通过flash发送的代币以及计算的费用金额给池子。
+    /// 必须检查调用此方法的调用者是否为由规范UniswapV3Factory部署的UniswapV3Pool。
+    /// @param fee0 到flash结束时池子应支付的token0中的费用金额
+    /// @param fee1 到flash结束时池子应支付的token1中的费用金额
+    /// @param data 通过IUniswapV3PoolActions#flash调用者传递的任何数据
     function uniswapV3FlashCallback(
         uint256 fee0,
         uint256 fee1,
