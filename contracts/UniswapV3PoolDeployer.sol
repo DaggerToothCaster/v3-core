@@ -17,13 +17,13 @@ contract UniswapV3PoolDeployer is IUniswapV3PoolDeployer {
     /// @inheritdoc IUniswapV3PoolDeployer
     Parameters public override parameters;
 
-    /// @dev Deploys a pool with the given parameters by transiently setting the parameters storage slot and then
-    /// clearing it after deploying the pool.
-    /// @param factory The contract address of the Uniswap V3 factory
-    /// @param token0 The first token of the pool by address sort order
-    /// @param token1 The second token of the pool by address sort order
-    /// @param fee The fee collected upon every swap in the pool, denominated in hundredths of a bip
-    /// @param tickSpacing The spacing between usable ticks
+    /// @dev 通过临时设置参数存储槽来部署具有给定参数的池，然后
+    /// 部署池后清除它。
+    /// @param factory Uniswap V3工厂的合约地址
+    /// @param token0 按地址排序顺序的池中的第一个令牌
+    /// @param token1 按地址排序顺序的池中的第二个令牌
+    /// @param Fee 池中每次交换收取的费用，以百分之一 bip 计价
+    /// @param tickSpacing 可用刻度之间的间距
     function deploy(
         address factory,
         address token0,
